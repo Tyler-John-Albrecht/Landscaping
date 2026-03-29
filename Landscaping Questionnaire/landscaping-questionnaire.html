@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Questionnaire — Brechtland Web Services</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:      #FAFAF7;
+      --stone:      #E8E4DC;
+      --stone-mid:  #D4CFC5;
+      --sage:       #7C8C6E;
+      --sage-light: #A5B090;
+      --charcoal:   #1C1C1A;
+      --mist:       #F4F2EE;
+      --ink:        #111110;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--charcoal);
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── Progress Bar ─────────────────────────────────── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0;
+      height: 2px; background: var(--sage);
+      width: 0%; z-index: 9999;
+      transition: width 0.3s ease;
+    }
+
+    /* ── Header ──────────────────────────────────────── */
+    header {
+      background: var(--ink);
+      padding: clamp(48px, 8vw, 88px) clamp(24px, 6vw, 96px) clamp(40px, 6vw, 72px);
+      position: relative; overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute; bottom: 0; left: clamp(24px, 6vw, 96px); right: clamp(24px, 6vw, 96px);
+      height: 1px; background: rgba(250,250,247,0.08);
+    }
+    .header-eyebrow {
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.38em; text-transform: uppercase;
+      color: var(--sage-light);
+      display: block; margin-bottom: 20px;
+    }
+    .header-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 6vw, 80px);
+      font-weight: 300; line-height: 0.95;
+      color: var(--cream);
+    }
+    .header-title em { font-style: italic; color: var(--sage-light); }
+    .header-sub {
+      font-size: 12px; font-weight: 300;
+      letter-spacing: 0.06em; line-height: 1.9;
+      color: rgba(250,250,247,0.5);
+      margin-top: 24px; max-width: 520px;
+    }
+    .header-meta {
+      display: flex; align-items: center; gap: 32px;
+      margin-top: 36px; flex-wrap: wrap;
+    }
+    .header-meta-item {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .header-meta-rule { width: 24px; height: 1px; background: var(--sage); }
+    .header-meta-text {
+      font-size: 9px; letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(250,250,247,0.35);
+    }
+
+    /* ── Section Nav ─────────────────────────────────── */
+    #section-nav {
+      position: sticky; top: 2px; z-index: 100;
+      background: rgba(250,250,247,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--stone);
+      padding: 0 clamp(24px, 6vw, 96px);
+      display: flex; align-items: center; gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    #section-nav::-webkit-scrollbar { display: none; }
+    .snav-item {
+      font-size: 8px; font-weight: 600;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: rgba(28,28,26,0.35);
+      padding: 16px 20px;
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.25s;
+      flex-shrink: 0;
+    }
+    .snav-item:hover,
+    .snav-item.active {
+      color: var(--charcoal);
+      border-bottom-color: var(--sage);
+    }
+
+    /* ── Main Layout ─────────────────────────────────── */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: clamp(48px, 8vw, 96px) clamp(24px, 6vw, 48px);
+    }
+
+    /* ── Form Section ────────────────────────────────── */
+    .form-section {
+      padding-bottom: clamp(56px, 8vw, 88px);
+      margin-bottom: clamp(56px, 8vw, 88px);
+      border-bottom: 1px solid var(--stone);
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .form-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .form-section:last-of-type { border-bottom: none; }
+
+    .section-tag {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px;
+    }
+    .section-num {
+      font-size: 9px; letter-spacing: 0.3em;
+      color: var(--sage); font-weight: 500;
+    }
+    .section-rule { flex: 1; height: 1px; background: var(--stone); max-width: 40px; }
+    .section-label {
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: rgba(28,28,26,0.4);
+    }
+
+    .section-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 300; line-height: 1.1;
+      color: var(--charcoal);
+      margin-bottom: 8px;
+    }
+    .section-heading em { font-style: italic; }
+    .section-desc {
+      font-size: 11px; font-weight: 300;
+      color: rgba(28,28,26,0.5);
+      letter-spacing: 0.04em; line-height: 1.85;
+      margin-bottom: 36px;
+    }
+
+    /* ── Field Groups ────────────────────────────────── */
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 600px) { .field-grid { grid-template-columns: 1fr; } }
+
+    .field-grid.cols-3 {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    @media (max-width: 700px) { .field-grid.cols-3 { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 460px) { .field-grid.cols-3 { grid-template-columns: 1fr; } }
+
+    .field-grid.full { grid-template-columns: 1fr; }
+
+    .field-group {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .field-group.span-2 { grid-column: span 2; }
+    @media (max-width: 600px) { .field-group.span-2 { grid-column: span 1; } }
+
+    .field-label {
+      font-size: 8px; font-weight: 600;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(28,28,26,0.5);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .field-label .required {
+      color: var(--sage);
+      font-size: 12px; line-height: 1;
+    }
+    .field-hint {
+      font-size: 10px; font-weight: 300;
+      color: rgba(28,28,26,0.35);
+      letter-spacing: 0.02em; line-height: 1.6;
+      margin-top: -4px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    select,
+    textarea {
+      width: 100%;
+      background: var(--mist);
+      border: 1px solid var(--stone);
+      border-radius: 0;
+      padding: 14px 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px; font-weight: 300;
+      color: var(--charcoal);
+      letter-spacing: 0.03em;
+      outline: none;
+      transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+      -webkit-appearance: none;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--sage);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(124,140,110,0.08);
+    }
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(28,28,26,0.28);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+      line-height: 1.75;
+    }
+    textarea.tall { min-height: 130px; }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237C8C6E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    /* ── Repeater Block ──────────────────────────────── */
+    .repeater-block {
+      background: var(--mist);
+      border: 1px solid var(--stone);
+      padding: 28px 28px 24px;
+      margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }
+    .repeater-block:focus-within { border-color: var(--sage-light); }
+    .repeater-header {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .repeater-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px; font-weight: 300;
+      color: rgba(28,28,26,0.08);
+      line-height: 1;
+    }
+    .repeater-rule { flex: 1; height: 1px; background: var(--stone); margin: 0 16px; }
+    .repeater-label {
+      font-size: 8px; font-weight: 600;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(28,28,26,0.35);
+    }
+
+    /* ── Checkbox Grid ───────────────────────────────── */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .checkbox-label {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      background: var(--mist);
+      border: 1px solid var(--stone);
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .checkbox-label:hover { border-color: var(--sage-light); }
+    .checkbox-label input[type="checkbox"] {
+      width: 14px; height: 14px; min-width: 14px;
+      border: 1px solid var(--stone-mid);
+      background: white;
+      appearance: none; -webkit-appearance: none;
+      cursor: pointer; padding: 0;
+      position: relative; transition: all 0.2s;
+    }
+    .checkbox-label input[type="checkbox"]:checked {
+      background: var(--sage);
+      border-color: var(--sage);
+    }
+    .checkbox-label input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute; top: 1px; left: 4px;
+      width: 4px; height: 8px;
+      border: 1.5px solid white;
+      border-top: none; border-left: none;
+      transform: rotate(40deg);
+    }
+    .checkbox-label input[type="checkbox"]:checked ~ .checkbox-text {
+      color: var(--charcoal);
+    }
+    .checkbox-label:has(input:checked) {
+      border-color: var(--sage-light);
+      background: rgba(124,140,110,0.06);
+    }
+    .checkbox-text {
+      font-size: 10px; font-weight: 400;
+      letter-spacing: 0.05em;
+      color: rgba(28,28,26,0.6);
+      transition: color 0.2s;
+    }
+
+    /* ── Submit ──────────────────────────────────────── */
+    .submit-wrap {
+      padding-top: clamp(40px, 6vw, 64px);
+      display: flex; flex-direction: column;
+      align-items: flex-start; gap: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+    }
+    .submit-wrap.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .submit-note {
+      font-size: 10px; font-weight: 300;
+      color: rgba(28,28,26,0.4);
+      letter-spacing: 0.06em; line-height: 1.8;
+      max-width: 420px;
+    }
+    .btn-submit {
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--cream);
+      background: var(--charcoal);
+      border: none;
+      padding: 18px 48px;
+      cursor: pointer;
+      transition: all 0.35s;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .btn-submit:hover {
+      background: var(--sage);
+      color: white;
+    }
+    .btn-submit:disabled {
+      opacity: 0.5; cursor: not-allowed;
+    }
+
+    /* ── Success Screen ──────────────────────────────── */
+    #success-screen {
+      display: none;
+      min-height: 60vh;
+      flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: clamp(60px, 10vw, 120px) clamp(24px, 6vw, 96px);
+    }
+    #success-screen.show { display: flex; }
+    .success-rule { width: 1px; height: 0; background: var(--sage); margin: 0 auto 40px; }
+    .success-icon {
+      width: 48px; height: 48px;
+      border: 1px solid var(--sage);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 32px;
+    }
+    .success-icon svg { stroke: var(--sage); }
+    .success-eyebrow {
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.38em; text-transform: uppercase;
+      color: var(--sage); margin-bottom: 20px;
+      display: block;
+    }
+    .success-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 300; line-height: 1.1;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+    }
+    .success-title em { font-style: italic; }
+    .success-body {
+      font-size: 12px; font-weight: 300;
+      letter-spacing: 0.06em; line-height: 1.9;
+      color: rgba(28,28,26,0.5);
+      max-width: 440px; margin: 0 auto;
+    }
+
+    /* ── Footer ──────────────────────────────────────── */
+    footer {
+      background: var(--ink);
+      padding: 32px clamp(24px, 6vw, 96px);
+      display: flex; align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; font-weight: 300;
+      letter-spacing: 0.12em; color: var(--cream);
+    }
+    .footer-copy {
+      font-size: 9px; letter-spacing: 0.18em;
+      color: rgba(250,250,247,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- ── HEADER ─────────────────────────────────────────────────── -->
+<header>
+  <span class="header-eyebrow">Brechtland Web Services</span>
+  <h1 class="header-title">
+    Your Website,<br><em>Perfectly Told</em>
+  </h1>
+  <p class="header-sub">
+    Complete each section as thoroughly as possible. Your answers give us everything we need to build a site that accurately represents your business — from the headline to the fine print.
+  </p>
+  <div class="header-meta">
+    <div class="header-meta-item">
+      <div class="header-meta-rule"></div>
+      <span class="header-meta-text">8 Sections</span>
+    </div>
+    <div class="header-meta-item">
+      <div class="header-meta-rule"></div>
+      <span class="header-meta-text">~15 Minutes</span>
+    </div>
+    <div class="header-meta-item">
+      <div class="header-meta-rule"></div>
+      <span class="header-meta-text">Landscaping</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── SECTION NAV ────────────────────────────────────────────── -->
+<nav id="section-nav">
+  <a href="#s1" class="snav-item active">01 — Identity</a>
+  <a href="#s2" class="snav-item">02 — Hero</a>
+  <a href="#s3" class="snav-item">03 — Services</a>
+  <a href="#s4" class="snav-item">04 — Expertise</a>
+  <a href="#s5" class="snav-item">05 — Process</a>
+  <a href="#s6" class="snav-item">06 — Testimonial</a>
+  <a href="#s7" class="snav-item">07 — Contact</a>
+  <a href="#s8" class="snav-item">08 — Social</a>
+</nav>
+
+<!-- ── FORM ───────────────────────────────────────────────────── -->
+<main>
+  <form id="tq-form" novalidate>
+
+    <!-- §1 — Business Identity -->
+    <div class="form-section" id="s1">
+      <div class="section-tag">
+        <span class="section-num">01</span>
+        <div class="section-rule"></div>
+        <span class="section-label">Business Identity</span>
+      </div>
+      <h2 class="section-heading">Who <em>You Are</em></h2>
+      <p class="section-desc">The core identity of your business — how we'll label every headline, nav bar, and footer on your site.</p>
+
+      <div class="field-grid">
+        <div class="field-group">
+          <label class="field-label" for="biz_name">Business Name <span class="required">*</span></label>
+          <input type="text" id="biz_name" name="biz_name" placeholder="e.g. Green Horizon Landscaping" required />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="biz_tagline">Tagline / Specialty <span class="required">*</span></label>
+          <input type="text" id="biz_tagline" name="biz_tagline" placeholder="e.g. Full-Service Outdoor Design" required />
+          <span class="field-hint">5–7 words. Appears under your logo and in the browser tab.</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="biz_city">City &amp; State <span class="required">*</span></label>
+          <input type="text" id="biz_city" name="biz_city" placeholder="e.g. Austin, TX" required />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="biz_service_area">Service Area</label>
+          <input type="text" id="biz_service_area" name="biz_service_area" placeholder="e.g. Greater Austin Metro &amp; Surrounding Counties" />
+          <span class="field-hint">Used in the footer and SEO description.</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="biz_years">Years in Business</label>
+          <input type="text" id="biz_years" name="biz_years" placeholder="e.g. 12" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="biz_type">Business Type</label>
+          <select id="biz_type" name="biz_type">
+            <option value="" disabled selected>Select one</option>
+            <option>Residential Only</option>
+            <option>Commercial Only</option>
+            <option>Residential &amp; Commercial</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- §2 — Hero Section -->
+    <div class="form-section" id="s2">
+      <div class="section-tag">
+        <span class="section-num">02</span>
+        <div class="section-rule"></div>
+        <span class="section-label">Hero Section</span>
+      </div>
+      <h2 class="section-heading">The First <em>Impression</em></h2>
+      <p class="section-desc">The full-screen opening of your site. Bold headline, supporting copy, and two call-to-action buttons.</p>
+
+      <div class="field-grid full">
+        <div class="field-group">
+          <label class="field-label" for="hero_headline">Hero Headline <span class="required">*</span></label>
+          <input type="text" id="hero_headline" name="hero_headline" placeholder="e.g. Crafting Landscapes Worth Living In" required />
+          <span class="field-hint">4–8 words. The big, bold statement that defines your brand. One word can be italicized — mark it with *asterisks* if desired.</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="hero_sub">Hero Subtext <span class="required">*</span></label>
+          <textarea id="hero_sub" name="hero_sub" placeholder="e.g. We design and maintain exceptional outdoor spaces for homeowners who demand more — where craft, nature, and long-term care come together." required></textarea>
+          <span class="field-hint">1–2 sentences. Max ~30 words. Describes what you do and who you serve.</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="hero_cta_primary">Primary Button Text <span class="required">*</span></label>
+          <input type="text" id="hero_cta_primary" name="hero_cta_primary" placeholder="e.g. Get a Free Estimate" required />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="hero_cta_secondary">Secondary Button Text</label>
+          <input type="text" id="hero_cta_secondary" name="hero_cta_secondary" placeholder="e.g. View Our Work" />
+        </div>
+      </div>
+    </div>
+
+    <!-- §3 — Services -->
+    <div class="form-section" id="s3">
+      <div class="section-tag">
+        <span class="section-num">03</span>
+        <div class="section-rule"></div>
+        <span class="section-label">Services</span>
+      </div>
+      <h2 class="section-heading">Three Core <em>Disciplines</em></h2>
+      <p class="section-desc">Your three primary services — each gets its own full-height photo card on the site. Name them clearly and describe the result the client gets, not just the task.</p>
+
+      <div class="field-group" style="margin-bottom: 8px;">
+        <label class="field-label">Services Section Eyebrow Label</label>
+        <input type="text" name="services_eyebrow" placeholder="e.g. What We Do  /  Our Services  /  Our Disciplines" />
+        <span class="field-hint">Small uppercase label above the section headline. Default: "Our Services"</span>
+      </div>
+      <div class="field-group" style="margin-bottom: 28px; margin-top: 20px;">
+        <label class="field-label">Services Section Headline</label>
+        <input type="text" name="services_headline" placeholder="e.g. Three Ways We Transform Your Property" />
+        <span class="field-hint">One word can be italicized — wrap it in *asterisks*. Default: "Three Pillars of Outdoor Excellence"</span>
+      </div>
+
+      <!-- Service 01 -->
+      <div class="repeater-block">
+        <div class="repeater-header">
+          <span class="repeater-num">01</span>
+          <div class="repeater-rule"></div>
+          <span class="repeater-label">First Service</span>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label class="field-label" for="svc1_name">Service Name <span class="required">*</span></label>
+            <input type="text" id="svc1_name" name="svc1_name" placeholder="e.g. Lawn Care &amp; Maintenance" required />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="svc1_sub">Short Description <span class="required">*</span></label>
+            <textarea id="svc1_sub" name="svc1_sub" placeholder="e.g. Weekly mowing, edging, aeration, and seasonal clean-ups — kept to a standard your neighbors will notice." required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service 02 -->
+      <div class="repeater-block">
+        <div class="repeater-header">
+          <span class="repeater-num">02</span>
+          <div class="repeater-rule"></div>
+          <span class="repeater-label">Second Service</span>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label class="field-label" for="svc2_name">Service Name <span class="required">*</span></label>
+            <input type="text" id="svc2_name" name="svc2_name" placeholder="e.g. Landscape Design &amp; Installation" required />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="svc2_sub">Short Description <span class="required">*</span></label>
+            <textarea id="svc2_sub" name="svc2_sub" placeholder="e.g. Custom planting plans, sod installation, and garden builds designed to elevate your curb appeal year-round." required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service 03 -->
+      <div class="repeater-block">
+        <div class="repeater-header">
+          <span class="repeater-num">03</span>
+          <div class="repeater-rule"></div>
+          <span class="repeater-label">Third Service</span>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label class="field-label" for="svc3_name">Service Name <span class="required">*</span></label>
+            <input type="text" id="svc3_name" name="svc3_name" placeholder="e.g. Irrigation &amp; Drainage" required />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="svc3_sub">Short Description <span class="required">*</span></label>
+            <textarea id="svc3_sub" name="svc3_sub" placeholder="e.g. Smart sprinkler systems and French drain solutions that protect your investment and reduce your water bill." required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional services checkbox -->
+      <div class="field-group" style="margin-top: 12px;">
+        <label class="field-label">Additional Services Offered <span style="font-weight:300; text-transform: none; letter-spacing: 0;">(select all that apply — listed in footer)</span></label>
+        <div class="checkbox-grid">
+          <label class="checkbox-label"><input type="checkbox" name="add_svc[]" value="Tree Trimming" /><span class="checkbox-text">Tree Trimming</span></label>
+          <label class="checkbox-label"><input type="checkbox" name="add_svc[]" value="Mulching" /><span class="checkbox-text">Mulching</span></label>
+          <label class="checkbox-label"><input type="checkbox" name="add_svc[]" value="Sod Installation" /><span class="checkbox-text">Sod Installation</span></label>
+          <label class="checkbox-label"><input type="checkbox" name="add_svc[]" value="Hardscaping / Pavers" /><span class="checkbox-text">Hardscaping / Pavers</span></label>
+          <label class="checkbox-label"><input type="checkbox" name="add_svc[]" value="Retaining Walls" /><span class="checkbox-text">Retaining Walls</span></label>
+          <label class="checkbox-label"><input type="checkbox" name="add_svc[]" value="Outdoor Lighting" /><span class="checkbox-text">Outdoor Lighting</span></label>
+          <label class="checkbox-label"><input type="checkbox" name="add_svc[]" value="Fertilization" /><span class="checkbox-text">Fertilization</span></label>
+          <label class="checkbox-label"><input type="checkbox" name="add_svc[]" value="Leaf Removal" /><span class="checkbox-text">Leaf Removal</span></label>
+          <label class="checkbox-label"><input type="checkbox" name="add_svc[]" value="Snow Removal" /><span class="checkbox-text">Snow Removal</span></label>
+          <label class="checkbox-label"><input type="checkbox" name="add_svc[]" value="Pest Control" /><span class="checkbox-text">Pest / Weed Control</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- §4 — Expertise / Value Props -->
+    <div class="form-section" id="s4">
+      <div class="section-tag">
+        <span class="section-num">04</span>
+        <div class="section-rule"></div>
+        <span class="section-label">Expertise &amp; Differentiators</span>
+      </div>
+      <h2 class="section-heading">Why They Choose <em>You</em></h2>
+      <p class="section-desc">Four brief cards that communicate your strengths and approach. Think: what do your best clients say sets you apart?</p>
+
+      <div class="repeater-block">
+        <div class="repeater-header">
+          <span class="repeater-num">01</span>
+          <div class="repeater-rule"></div>
+          <span class="repeater-label">First Point</span>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label class="field-label" for="exp1_title">Title <span class="required">*</span></label>
+            <input type="text" id="exp1_title" name="exp1_title" placeholder="e.g. Free On-Site Estimates" required />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="exp1_desc">Description <span class="required">*</span></label>
+            <textarea id="exp1_desc" name="exp1_desc" placeholder="e.g. We visit every property before quoting — no guesswork, no surprises, just an honest scope of what your yard needs." required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="repeater-block">
+        <div class="repeater-header">
+          <span class="repeater-num">02</span>
+          <div class="repeater-rule"></div>
+          <span class="repeater-label">Second Point</span>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label class="field-label" for="exp2_title">Title <span class="required">*</span></label>
+            <input type="text" id="exp2_title" name="exp2_title" placeholder="e.g. Licensed &amp; Insured Crews" required />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="exp2_desc">Description <span class="required">*</span></label>
+            <textarea id="exp2_desc" name="exp2_desc" placeholder="e.g. Every technician on your property is background-checked, fully insured, and trained to our standard." required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="repeater-block">
+        <div class="repeater-header">
+          <span class="repeater-num">03</span>
+          <div class="repeater-rule"></div>
+          <span class="repeater-label">Third Point</span>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label class="field-label" for="exp3_title">Title <span class="required">*</span></label>
+            <input type="text" id="exp3_title" name="exp3_title" placeholder="e.g. Consistent Scheduling" required />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="exp3_desc">Description <span class="required">*</span></label>
+            <textarea id="exp3_desc" name="exp3_desc" placeholder="e.g. Same crew, same day, every week — so your lawn is never an afterthought and you never have to follow up." required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="repeater-block">
+        <div class="repeater-header">
+          <span class="repeater-num">04</span>
+          <div class="repeater-rule"></div>
+          <span class="repeater-label">Fourth Point</span>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label class="field-label" for="exp4_title">Title <span class="required">*</span></label>
+            <input type="text" id="exp4_title" name="exp4_title" placeholder="e.g. Satisfaction Guarantee" required />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="exp4_desc">Description <span class="required">*</span></label>
+            <textarea id="exp4_desc" name="exp4_desc" placeholder="e.g. Not happy with the result? We'll come back within 48 hours and make it right — at no charge." required></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- §5 — Process -->
+    <div class="form-section" id="s5">
+      <div class="section-tag">
+        <span class="section-num">05</span>
+        <div class="section-rule"></div>
+        <span class="section-label">How It Works</span>
+      </div>
+      <h2 class="section-heading">Your <em>Process</em></h2>
+      <p class="section-desc">Walk a prospect through what happens after they contact you. Four steps that make booking feel easy and trustworthy.</p>
+
+      <div class="repeater-block">
+        <div class="repeater-header">
+          <span class="repeater-num">01</span>
+          <div class="repeater-rule"></div>
+          <span class="repeater-label">Step One</span>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label class="field-label" for="step1_title">Step Title <span class="required">*</span></label>
+            <input type="text" id="step1_title" name="step1_title" placeholder="e.g. Request an Estimate" required />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="step1_desc">Step Description <span class="required">*</span></label>
+            <textarea id="step1_desc" name="step1_desc" placeholder="e.g. Fill out a quick form or give us a call — we'll confirm within a few hours and schedule your free on-site visit." required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="repeater-block">
+        <div class="repeater-header">
+          <span class="repeater-num">02</span>
+          <div class="repeater-rule"></div>
+          <span class="repeater-label">Step Two</span>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label class="field-label" for="step2_title">Step Title <span class="required">*</span></label>
+            <input type="text" id="step2_title" name="step2_title" placeholder="e.g. On-Site Walkthrough" required />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="step2_desc">Step Description <span class="required">*</span></label>
+            <textarea id="step2_desc" name="step2_desc" placeholder="e.g. We walk the property with you, understand your goals, and put together a detailed written quote — no pressure, no obligation." required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="repeater-block">
+        <div class="repeater-header">
+          <span class="repeater-num">03</span>
+          <div class="repeater-rule"></div>
+          <span class="repeater-label">Step Three</span>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label class="field-label" for="step3_title">Step Title <span class="required">*</span></label>
+            <input type="text" id="step3_title" name="step3_title" placeholder="e.g. We Get to Work" required />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="step3_desc">Step Description <span class="required">*</span></label>
+            <textarea id="step3_desc" name="step3_desc" placeholder="e.g. Once approved, your project is scheduled and our crew arrives on time, fully equipped, and ready to deliver." required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="repeater-block">
+        <div class="repeater-header">
+          <span class="repeater-num">04</span>
+          <div class="repeater-rule"></div>
+          <span class="repeater-label">Step Four</span>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label class="field-label" for="step4_title">Step Title <span class="required">*</span></label>
+            <input type="text" id="step4_title" name="step4_title" placeholder="e.g. Ongoing Care" required />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="step4_desc">Step Description <span class="required">*</span></label>
+            <textarea id="step4_desc" name="step4_desc" placeholder="e.g. We don't disappear after the first visit. For recurring clients, we show up like clockwork and keep everything looking its best." required></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- §6 — Testimonial -->
+    <div class="form-section" id="s6">
+      <div class="section-tag">
+        <span class="section-num">06</span>
+        <div class="section-rule"></div>
+        <span class="section-label">Client Testimonial</span>
+      </div>
+      <h2 class="section-heading">A Voice That <em>Sells</em></h2>
+      <p class="section-desc">One powerful quote from a real client — displayed in a full dark section. Choose your most compelling review.</p>
+
+      <div class="field-grid full">
+        <div class="field-group">
+          <label class="field-label" for="testi_quote">Testimonial Quote <span class="required">*</span></label>
+          <textarea id="testi_quote" name="testi_quote" class="tall" placeholder='e.g. "They completely transformed our backyard — it looks like something out of a magazine. The crew was professional, on time, and genuinely cared about getting it right. We won't use anyone else."' required></textarea>
+          <span class="field-hint">1–3 sentences. First-person. Do not include the quotation marks — we'll style those automatically.</span>
+        </div>
+        <div class="field-grid">
+          <div class="field-group">
+            <label class="field-label" for="testi_name">Client Name <span class="required">*</span></label>
+            <input type="text" id="testi_name" name="testi_name" placeholder="e.g. Sarah &amp; Mark T." required />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="testi_sub">Client Descriptor</label>
+            <input type="text" id="testi_sub" name="testi_sub" placeholder="e.g. Homeowner — Austin, TX" />
+            <span class="field-hint">Appears below the client's name in small uppercase text.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- §7 — Contact -->
+    <div class="form-section" id="s7">
+      <div class="section-tag">
+        <span class="section-num">07</span>
+        <div class="section-rule"></div>
+        <span class="section-label">Contact Information</span>
+      </div>
+      <h2 class="section-heading">How They <em>Reach You</em></h2>
+      <p class="section-desc">Used in the final CTA section, footer, and contact links. Every field here directly populates the live site.</p>
+
+      <div class="field-grid">
+        <div class="field-group">
+          <label class="field-label" for="phone">Phone Number <span class="required">*</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="e.g. (512) 555-0182" required />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="email">Business Email <span class="required">*</span></label>
+          <input type="email" id="email" name="email" placeholder="e.g. hello@greenhorizo n.com" required />
+        </div>
+        <div class="field-group span-2">
+          <label class="field-label" for="address">Business Address</label>
+          <input type="text" id="address" name="address" placeholder="e.g. 4821 Oak Creek Dr, Austin, TX 78745" />
+          <span class="field-hint">Optional. Shown in the footer only if provided.</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 36px; padding-top: 32px; border-top: 1px solid var(--stone);">
+        <p class="section-desc" style="margin-bottom: 20px;">Final CTA Section — the closing call-to-action at the bottom of the page.</p>
+        <div class="field-grid full">
+          <div class="field-group">
+            <label class="field-label" for="cta_headline">CTA Headline <span class="required">*</span></label>
+            <input type="text" id="cta_headline" name="cta_headline" placeholder="e.g. Ready for a Yard You're Proud Of?" required />
+            <span class="field-hint">One word can be italicized — mark it *like this*.</span>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="cta_sub">CTA Subtext</label>
+            <textarea id="cta_sub" name="cta_sub" placeholder="e.g. Every great yard starts with a conversation. Reach out today and get a free estimate — no commitment required."></textarea>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="cta_btn">CTA Button Label <span class="required">*</span></label>
+            <input type="text" id="cta_btn" name="cta_btn" placeholder="e.g. Get Your Free Estimate" required />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- §8 — Social & Additional -->
+    <div class="form-section" id="s8">
+      <div class="section-tag">
+        <span class="section-num">08</span>
+        <div class="section-rule"></div>
+        <span class="section-label">Social &amp; Additional</span>
+      </div>
+      <h2 class="section-heading">Links &amp; <em>Extras</em></h2>
+      <p class="section-desc">Social links appear in the footer. The final field is for anything we should know that wasn't covered above.</p>
+
+      <div class="field-grid">
+        <div class="field-group">
+          <label class="field-label" for="facebook">Facebook URL</label>
+          <input type="url" id="facebook" name="facebook" placeholder="https://facebook.com/yourbusiness" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="instagram">Instagram URL</label>
+          <input type="url" id="instagram" name="instagram" placeholder="https://instagram.com/yourbusiness" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="google_review">Google Review Link</label>
+          <input type="url" id="google_review" name="google_review" placeholder="https://g.page/r/..." />
+          <span class="field-hint">We'll add a "Leave Us a Review" footer link if provided.</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="license_num">License Number</label>
+          <input type="text" id="license_num" name="license_num" placeholder="e.g. LCC-108432" />
+          <span class="field-hint">Displayed in the footer as a trust signal.</span>
+        </div>
+        <div class="field-group span-2">
+          <label class="field-label" for="notes">Additional Notes</label>
+          <textarea id="notes" name="notes" class="tall" placeholder="Anything else we should know — special pricing, seasonal blackout dates, specific branding preferences, colours you want or want to avoid, a second location, etc."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-wrap" id="submit-wrap">
+      <p class="submit-note">
+        Your answers are sent directly to our team. We'll review everything and reach out within 1 business day with your first draft timeline.
+      </p>
+      <button type="submit" class="btn-submit" id="submit-btn">Submit Questionnaire</button>
+    </div>
+
+  </form>
+
+  <!-- Success -->
+  <div id="success-screen">
+    <div class="success-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <span class="success-eyebrow">Questionnaire Received</span>
+    <h2 class="success-title">Thank You for<br><em>Your Time</em></h2>
+    <p class="success-body">
+      We've received everything we need to get started. Expect a reply within 1 business day with your project timeline and any follow-up questions.
+    </p>
+  </div>
+</main>
+
+<!-- ── FOOTER ──────────────────────────────────────────────────── -->
+<footer>
+  <span class="footer-brand">Brechtland Web Services</span>
+  <span class="footer-copy">Landscaping Client Questionnaire</span>
+</footer>
+
+<script>
+  /* ── Reveal on scroll ─────────────────────────────── */
+  const sections = document.querySelectorAll('.form-section, .submit-wrap');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.06 });
+  sections.forEach(s => io.observe(s));
+
+  /* ── Progress Bar ─────────────────────────────────── */
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    bar.style.width = pct + '%';
+  });
+
+  /* ── Sticky Nav Active State ──────────────────────── */
+  const navLinks = document.querySelectorAll('.snav-item');
+  const formSections = document.querySelectorAll('.form-section');
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.snav-item[href="#${e.target.id}"]`);
+        if (active) {
+          active.classList.add('active');
+          active.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+        }
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  formSections.forEach(s => sectionObserver.observe(s));
+
+  /* ── Form Submit ──────────────────────────────────── */
+  document.getElementById('tq-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const btn = document.getElementById('submit-btn');
+    const required = this.querySelectorAll('[required]');
+    let valid = true;
+    required.forEach(field => {
+      if (!field.value.trim()) {
+        field.style.borderColor = '#C0837A';
+        field.style.background = 'rgba(192,131,122,0.06)';
+        valid = false;
+        field.addEventListener('input', () => {
+          field.style.borderColor = '';
+          field.style.background = '';
+        }, { once: true });
+      }
+    });
+
+    if (!valid) {
+      const firstErr = this.querySelector('[required][style*="C0837A"]');
+      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    // Collect form data
+    const data = new FormData(this);
+    const payload = {};
+    for (const [key, val] of data.entries()) {
+      if (payload[key]) {
+        payload[key] = Array.isArray(payload[key]) ? [...payload[key], val] : [payload[key], val];
+      } else {
+        payload[key] = val;
+      }
+    }
+
+    // ── Send to Formspree ──────────────────────────────
+    // REPLACE the URL below with your Formspree endpoint
+    // e.g. https://formspree.io/f/xyzabcde
+    const FORMSPREE_URL = 'https://formspree.io/f/YOUR_FORM_ID';
+
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok || FORMSPREE_URL.includes('YOUR_FORM_ID')) {
+        // Show success (also shows if using placeholder URL, for preview)
+        document.getElementById('tq-form').style.display = 'none';
+        const success = document.getElementById('success-screen');
+        success.classList.add('show');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (err) {
+      // If using placeholder Formspree URL, show success anyway for preview
+      if (FORMSPREE_URL.includes('YOUR_FORM_ID')) {
+        document.getElementById('tq-form').style.display = 'none';
+        document.getElementById('success-screen').classList.add('show');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Submit Questionnaire';
+        alert('Something went wrong. Please try again or email us directly.');
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
