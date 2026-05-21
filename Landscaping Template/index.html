@@ -113,17 +113,28 @@
         /* PAIN SECTION */
         #pain{background:var(--cream-mid);padding:6rem 0;}
         .pain-inner{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
-        .pain-img-wrap{position:relative;border-radius:3px;overflow:hidden;box-shadow:var(--shadow-hover);}
-        .pain-img-wrap img{width:100%;height:500px;object-fit:cover;object-position:center;display:block;}
-        .pain-badge{position:absolute;bottom:1.5rem;left:1.5rem;background:var(--forest-deep);border:1px solid rgba(196,149,106,.32);border-radius:3px;padding:.8rem 1.2rem;}
-        .pain-badge-big{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;color:var(--cream);display:block;line-height:1.1;margin-bottom:.25rem;}
-        .pain-badge-small{font-family:'Raleway',sans-serif;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--stone);display:block;}
         .pain-text .eyebrow{margin-bottom:1.2rem;}
         .pain-text .section-headline{margin-bottom:1.4rem;}
         .pain-text .body-copy{margin-bottom:1.8rem;}
         .pain-bullets{list-style:none;display:flex;flex-direction:column;gap:.9rem;margin-bottom:2.2rem;}
         .pain-bullets li{display:flex;align-items:flex-start;gap:.75rem;font-family:'Raleway',sans-serif;font-size:.9rem;line-height:1.6;color:var(--text-mid);font-weight:300;}
         .pain-bullets li svg{color:var(--moss);flex-shrink:0;margin-top:3px;}
+
+        /* BEFORE / AFTER SLIDER */
+        .ba-wrap{position:relative;border-radius:4px;overflow:hidden;box-shadow:var(--shadow-hover);user-select:none;-webkit-user-select:none;touch-action:none;}
+        .ba-wrap img{display:block;width:100%;height:500px;object-fit:cover;object-position:center;}
+        .ba-after{position:relative;z-index:1;}
+        .ba-before-clip{position:absolute;inset:0;z-index:2;overflow:hidden;width:50%;}
+        .ba-before-clip img{position:absolute;top:0;left:0;height:100%;width:auto;min-width:100%;}
+        .ba-handle{position:absolute;top:0;bottom:0;left:50%;z-index:3;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;cursor:ew-resize;width:44px;}
+        .ba-line{flex:1;width:2px;background:rgba(255,255,255,.9);pointer-events:none;}
+        .ba-circle{width:44px;height:44px;border-radius:50%;background:var(--cream);box-shadow:0 2px 16px rgba(15,34,24,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;pointer-events:none;border:2px solid rgba(255,255,255,.8);}
+        .ba-circle svg{color:var(--forest);}
+        .ba-label{position:absolute;bottom:1.2rem;z-index:4;font-family:'Raleway',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:.35rem .75rem;border-radius:2px;}
+        .ba-label--before{left:1.2rem;background:rgba(15,34,24,.75);color:rgba(250,248,243,.85);}
+        .ba-label--after{right:1.2rem;background:var(--stone);color:var(--cream);}
+        .ba-hint{text-align:center;margin-top:.8rem;font-family:'Raleway',sans-serif;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-light);display:flex;align-items:center;justify-content:center;gap:.4rem;}
+        .ba-hint svg{color:var(--stone);}
 
         /* SERVICES */
         #services{background:var(--cream);}
@@ -398,11 +409,28 @@
 <section id="pain">
     <div class="container">
         <div class="pain-inner">
-            <div class="pain-img-wrap">
-                <img src="./ls_proof.jpg" alt="Beautifully transformed outdoor living space — lush landscaping, stone patio, manicured lawn" loading="lazy">
-                <div class="pain-badge">
-                    <span class="pain-badge-big">This Could Be Your Yard.</span>
-                    <span class="pain-badge-small">Same Property. One Season.</span>
+            <div>
+                <div class="ba-wrap" id="ba-slider">
+                    <!-- AFTER (base layer) -->
+                    <img class="ba-after" src="./ls_after.jpg" alt="After — beautifully transformed backyard with stone patio, manicured lawn, and lush plantings">
+                    <!-- BEFORE (clipped overlay) -->
+                    <div class="ba-before-clip" id="ba-clip">
+                        <img src="./ls_before.jpg" alt="Before — overgrown, neglected backyard">
+                    </div>
+                    <!-- DRAG HANDLE -->
+                    <div class="ba-handle" id="ba-handle">
+                        <div class="ba-line"></div>
+                        <div class="ba-circle">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/><polyline points="9 18 3 12 9 6" transform="translate(6,0)"/></svg>
+                        </div>
+                        <div class="ba-line"></div>
+                    </div>
+                    <span class="ba-label ba-label--before">Before</span>
+                    <span class="ba-label ba-label--after">After</span>
+                </div>
+                <div class="ba-hint">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 11V6a2 2 0 00-2-2 2 2 0 00-2 2v0M14 10V4a2 2 0 00-2-2 2 2 0 00-2 2v2M10 10.5V6a2 2 0 00-2-2 2 2 0 00-2 2v8l-1.1-2.1a1.5 1.5 0 00-2.7.9L4 17a8 8 0 008 7h0a8 8 0 008-8v-5a2 2 0 00-2-2 2 2 0 00-2 2"/></svg>
+                    Drag to reveal the transformation
                 </div>
             </div>
             <div class="pain-text">
@@ -816,6 +844,49 @@
         });
         gsap.from('.cta-content', { opacity: 0, y: 30, duration: 1, ease: 'power2.out', scrollTrigger: { trigger: '#cta-banner', start: 'top 78%', once: true } });
     });
+
+    /* BEFORE / AFTER SLIDER */
+    (function() {
+        const slider = document.getElementById('ba-slider');
+        const clip   = document.getElementById('ba-clip');
+        const handle = document.getElementById('ba-handle');
+        if (!slider || !clip || !handle) return;
+
+        let dragging = false;
+
+        function setPos(x) {
+            const rect = slider.getBoundingClientRect();
+            let pct    = (x - rect.left) / rect.width;
+            pct        = Math.min(Math.max(pct, 0.02), 0.98);
+            const p    = (pct * 100).toFixed(2) + '%';
+            clip.style.width  = p;
+            handle.style.left = p;
+        }
+
+        handle.addEventListener('mousedown',  e => { dragging = true; e.preventDefault(); });
+        handle.addEventListener('touchstart', e => { dragging = true; e.preventDefault(); }, { passive: false });
+        document.addEventListener('mousemove',  e => { if (dragging) setPos(e.clientX); });
+        document.addEventListener('touchmove',  e => { if (dragging) setPos(e.touches[0].clientX); }, { passive: true });
+        document.addEventListener('mouseup',  () => { dragging = false; });
+        document.addEventListener('touchend', () => { dragging = false; });
+        slider.addEventListener('click', e => { if (!dragging) setPos(e.clientX); });
+
+        /* Auto-pan left on first scroll into view — shows the reveal */
+        const io = new IntersectionObserver(entries => {
+            if (!entries[0].isIntersecting) return;
+            const start = performance.now();
+            (function tick(now) {
+                const t      = Math.min((now - start) / 1100, 1);
+                const eased  = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+                const pos    = 0.50 - eased * 0.30;   /* sweeps 50% → 20% */
+                clip.style.width  = (pos * 100).toFixed(2) + '%';
+                handle.style.left = (pos * 100).toFixed(2) + '%';
+                if (t < 1) requestAnimationFrame(tick);
+            })(start);
+            io.disconnect();
+        }, { threshold: 0.45 });
+        io.observe(slider);
+    })();
 </script>
 </body>
 </html>
