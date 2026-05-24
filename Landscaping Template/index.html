@@ -858,7 +858,9 @@
 
         // Pin overlay image to full slider width so it reveals, not slides
         function fixWidth() {
-            beforeImg.style.width = slider.offsetWidth + 'px';
+            beforeImg.style.width    = slider.offsetWidth + 'px';
+            beforeImg.style.minWidth = '0';
+            beforeImg.style.maxWidth = 'none';
         }
 
         function applyPct(p) {
