@@ -852,36 +852,55 @@
         const handle = document.getElementById('ba-handle');
         if (!slider || !clip || !handle) return;
 
-        let dragging = false;
+        let pct = 0.5;
+        let leaveAnim = null;
 
-        function setPos(x) {
-            const rect = slider.getBoundingClientRect();
-            let pct    = (x - rect.left) / rect.width;
-            pct        = Math.min(Math.max(pct, 0.02), 0.98);
-            const p    = (pct * 100).toFixed(2) + '%';
-            clip.style.width  = p;
-            handle.style.left = p;
+        function applyPct(p) {
+            pct = Math.min(Math.max(p, 0.02), 0.98);
+            const val = (pct * 100).toFixed(2) + '%';
+            clip.style.width  = val;
+            handle.style.left = val;
         }
 
-        handle.addEventListener('mousedown',  e => { dragging = true; e.preventDefault(); });
-        handle.addEventListener('touchstart', e => { dragging = true; e.preventDefault(); }, { passive: false });
-        document.addEventListener('mousemove',  e => { if (dragging) setPos(e.clientX); });
-        document.addEventListener('touchmove',  e => { if (dragging) setPos(e.touches[0].clientX); }, { passive: true });
-        document.addEventListener('mouseup',  () => { dragging = false; });
-        document.addEventListener('touchend', () => { dragging = false; });
-        slider.addEventListener('click', e => { if (!dragging) setPos(e.clientX); });
+        function posFromEvent(e) {
+            const rect = slider.getBoundingClientRect();
+            const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+            return x / rect.width;
+        }
 
-        /* Auto-pan left on first scroll into view — shows the reveal */
+        // Hover: cursor drives divider instantly
+        slider.addEventListener('mousemove', e => {
+            if (leaveAnim) { leaveAnim.kill(); leaveAnim = null; }
+            applyPct(posFromEvent(e));
+        });
+
+        // Smooth return to 50% on mouse leave (GSAP already loaded)
+        slider.addEventListener('mouseleave', () => {
+            leaveAnim = gsap.to({ val: pct }, {
+                val: 0.5,
+                duration: 0.7,
+                ease: 'power2.inOut',
+                onUpdate() { applyPct(this.targets()[0].val); }
+            });
+        });
+
+        // Touch: drag-based for mobile
+        let dragging = false;
+        slider.addEventListener('touchstart', e => { dragging = true; applyPct(posFromEvent(e)); e.preventDefault(); }, { passive: false });
+        document.addEventListener('touchmove',  e => { if (dragging) applyPct(posFromEvent(e)); }, { passive: true });
+        document.addEventListener('touchend',  () => { dragging = false; });
+
+        /* Auto-pan left on first scroll into view — keeps the reveal intro */
         const io = new IntersectionObserver(entries => {
             if (!entries[0].isIntersecting) return;
             const start = performance.now();
             (function tick(now) {
-                const t      = Math.min((now - start) / 1100, 1);
-                const eased  = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
-                const pos    = 0.50 - eased * 0.30;   /* sweeps 50% → 20% */
-                clip.style.width  = (pos * 100).toFixed(2) + '%';
-                handle.style.left = (pos * 100).toFixed(2) + '%';
+                const t     = Math.min((now - start) / 1100, 1);
+                const eased = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+                const pos   = 0.50 - eased * 0.30;   /* sweeps 50% → 20% */
+                applyPct(pos);
                 if (t < 1) requestAnimationFrame(tick);
+                else pct = pos;
             })(start);
             io.disconnect();
         }, { threshold: 0.45 });
