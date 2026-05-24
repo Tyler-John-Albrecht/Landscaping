@@ -847,13 +847,19 @@
 
     /* BEFORE / AFTER SLIDER */
     (function() {
-        const slider = document.getElementById('ba-slider');
-        const clip   = document.getElementById('ba-clip');
-        const handle = document.getElementById('ba-handle');
-        if (!slider || !clip || !handle) return;
+        const slider    = document.getElementById('ba-slider');
+        const clip      = document.getElementById('ba-clip');
+        const handle    = document.getElementById('ba-handle');
+        const beforeImg = clip ? clip.querySelector('img') : null;
+        if (!slider || !clip || !handle || !beforeImg) return;
 
         let pct = 0.5;
         let leaveAnim = null;
+
+        // Pin overlay image to full slider width so it reveals, not slides
+        function fixWidth() {
+            beforeImg.style.width = slider.offsetWidth + 'px';
+        }
 
         function applyPct(p) {
             pct = Math.min(Math.max(p, 0.02), 0.98);
@@ -867,6 +873,10 @@
             const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
             return x / rect.width;
         }
+
+        fixWidth();
+        applyPct(0.5);
+        window.addEventListener('resize', () => { fixWidth(); applyPct(pct); });
 
         // Hover: cursor drives divider instantly
         slider.addEventListener('mousemove', e => {
@@ -897,7 +907,7 @@
             (function tick(now) {
                 const t     = Math.min((now - start) / 1100, 1);
                 const eased = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
-                const pos   = 0.50 - eased * 0.30;   /* sweeps 50% → 20% */
+                const pos   = 0.50 - eased * 0.30;
                 applyPct(pos);
                 if (t < 1) requestAnimationFrame(tick);
                 else pct = pos;
