@@ -65,7 +65,7 @@
         #main-nav.scrolled{background:rgba(255,255,255,.97);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--border),0 4px 20px rgba(15,34,24,.08);padding:.85rem 0;}
         .nav-inner{display:flex;align-items:center;justify-content:space-between;}
         .nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none;}
-        .nav-logo-img{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;transition:transform .3s;}
+        .nav-logo-img{width:44px;height:44px;border-radius:50%;object-fit:contain;flex-shrink:0;transition:transform .3s;background:var(--forest-deep);}
         .nav-logo:hover .nav-logo-img{transform:scale(1.06);}
         .nav-logo-text{display:flex;flex-direction:column;line-height:1.15;}
         .nav-logo-main{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--white);transition:color .4s;}
@@ -79,13 +79,24 @@
         .nav-cta:hover{background:var(--lime-dark)!important;transform:translateY(-1px);}
 
         /* HERO */
-        #hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:center;overflow:hidden;}
+        #hero{position:relative;height:100vh;min-height:700px;display:flex;flex-direction:column;overflow:hidden;}
         .hero-bg{position:absolute;inset:0;background-image:url('./ls_hero_bg.jpg');background-size:cover;background-position:center 40%;will-change:transform;}
         .hero-overlay{position:absolute;inset:0;background:linear-gradient(110deg,rgba(15,34,24,.93) 0%,rgba(27,58,45,.78) 48%,rgba(15,34,24,.28) 100%);}
-        .hero-layout{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:3rem;width:100%;}
+        .hero-main{flex:1;display:flex;align-items:center;position:relative;z-index:2;}
+        .hero-layout{display:flex;align-items:center;justify-content:space-between;gap:3rem;width:100%;}
         .hero-content{max-width:660px;}
         .hero-mascot{flex-shrink:0;}
-        .hero-mascot img{width:260px;height:260px;border-radius:50%;object-fit:cover;border:4px solid rgba(109,190,45,.35);box-shadow:0 0 60px rgba(109,190,45,.12),0 20px 60px rgba(15,34,24,.55);}
+        .hero-mascot img{width:260px;height:260px;border-radius:50%;object-fit:contain;border:4px solid rgba(109,190,45,.35);box-shadow:0 0 60px rgba(109,190,45,.12),0 20px 60px rgba(15,34,24,.55);}
+
+        /* HERO TICKER */
+        .hero-stats{flex-shrink:0;background:rgba(10,26,17,.88);border-top:1px solid rgba(109,190,45,.18);padding:.95rem 0;overflow:hidden;position:relative;z-index:3;}
+        .hstat-ticker{display:flex;align-items:center;width:max-content;animation:ticker-scroll 32s linear infinite;}
+        .hstat-ticker:hover{animation-play-state:paused;}
+        @keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+        .hstat{display:flex;align-items:center;gap:10px;padding:0 2.8rem;border-right:1px solid rgba(109,190,45,.18);white-space:nowrap;flex-shrink:0;}
+        .hstat:last-child{border-right:none;}
+        .hstat-icon{color:var(--lime);flex-shrink:0;}
+        .hstat-lbl{font-family:'Lato',sans-serif;font-size:.76rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.82);}
         .hero-eyebrow{display:inline-flex;align-items:center;gap:.85rem;font-family:'Lato',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--lime);margin-bottom:1.4rem;}
         .hero-eyebrow::before{content:'';display:block;width:32px;height:2px;background:var(--lime);flex-shrink:0;}
         .hero-headline{font-size:clamp(2.8rem,5.5vw,4.8rem);font-weight:700;line-height:1.07;color:var(--white);margin-bottom:1.3rem;}
@@ -226,20 +237,24 @@
         .mascot-callout-name{font-family:'Lato',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);margin-bottom:.35rem;}
         .mascot-callout-quote{font-family:'Lato',sans-serif;font-size:.9rem;font-style:italic;color:rgba(255,255,255,.7);line-height:1.6;}
 
-        /* TESTIMONIALS */
+        /* TESTIMONIALS CAROUSEL */
         #testimonials{background:var(--cream-light);}
         .testimonials-header{text-align:center;max-width:540px;margin:0 auto 3.5rem;}
         .testimonials-header .eyebrow{justify-content:center;margin-bottom:1.2rem;}
-        .tc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;}
-        .tc{background:var(--white);border-radius:6px;padding:2rem 2.2rem;box-shadow:var(--shadow-card);border:1px solid var(--border);transition:transform .4s,box-shadow .4s;}
-        .tc:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);}
-        .tc-stars{display:flex;gap:2px;margin-bottom:1.1rem;}
+        .tc-carousel-wrap{overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent 0%,black 5%,black 95%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,black 5%,black 95%,transparent 100%);}
+        .tc-track{display:flex;gap:1.6rem;width:max-content;animation:review-scroll 44s linear infinite;}
+        .tc-track:hover{animation-play-state:paused;}
+        @keyframes review-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+        .tc{background:var(--white);border-radius:8px;padding:2rem 2.2rem;box-shadow:var(--shadow-card);border:1px solid var(--border);width:340px;flex-shrink:0;display:flex;flex-direction:column;gap:1rem;}
+        .tc-stars{display:flex;gap:2px;}
         .tc-stars svg{color:#FFB800;}
-        .tc-quote{font-family:'Lato',sans-serif;font-size:.92rem;line-height:1.78;color:var(--text-mid);font-weight:400;margin-bottom:1.4rem;font-style:italic;}
-        .tc-open{font-family:'Playfair Display',serif;font-size:3rem;color:var(--lime);line-height:0;vertical-align:-.55rem;margin-right:.1rem;}
+        .tc-quote{font-family:'Lato',sans-serif;font-size:.9rem;line-height:1.75;color:var(--text-mid);font-weight:400;font-style:italic;flex:1;}
+        .tc-open{font-family:'Playfair Display',serif;font-size:2.8rem;color:var(--lime);line-height:0;vertical-align:-.52rem;margin-right:.1rem;}
+        .tc-author{display:flex;align-items:center;gap:.85rem;padding-top:1rem;border-top:1px solid var(--border);}
+        .tc-ava{width:40px;height:40px;border-radius:50%;background:var(--cream-light);border:2px solid rgba(109,190,45,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--green-accent);}
         .tc-name{font-family:'Lato',sans-serif;font-size:.88rem;font-weight:700;color:var(--text-dark);}
-        .tc-location{font-family:'Lato',sans-serif;font-size:.76rem;color:var(--text-light);}
-        .tc-source{font-family:'Lato',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-accent);margin-top:.3rem;}
+        .tc-location{font-family:'Lato',sans-serif;font-size:.75rem;color:var(--text-light);}
+        .tc-source{font-family:'Lato',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-accent);margin-top:.2rem;}
 
         /* FAQ */
         #faq{background:var(--white);}
@@ -370,75 +385,70 @@
 <section id="hero">
     <div class="hero-bg" id="hero-bg"></div>
     <div class="hero-overlay"></div>
-    <div class="container hero-layout">
-        <div class="hero-content">
-            <div class="hero-eyebrow">Zephyrhills · Wesley Chapel · Dade City, FL</div>
-            <h1 class="hero-headline">Your Lawn Should Be<br>the <em>Best on the Block.</em></h1>
-            <p class="hero-subtext">Premium lawn care, landscaping, and pressure washing — done right, every visit. We show up on time, treat your property like our own, and don't stop until the job is perfect.</p>
-            <div class="hero-offer-strip">
-                <div class="offer-item offer-item--highlight">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    25% Off First Month
+    <div class="hero-main">
+        <div class="container hero-layout">
+            <div class="hero-content">
+                <div class="hero-eyebrow">Zephyrhills · Wesley Chapel · Dade City, FL</div>
+                <h1 class="hero-headline">Your Lawn Should Be<br>the <em>Best on the Block.</em></h1>
+                <p class="hero-subtext">Premium lawn care, landscaping, and pressure washing — done right, every visit. We show up on time, treat your property like our own, and don't stop until the job is perfect.</p>
+                <div class="hero-offer-strip">
+                    <div class="offer-item offer-item--highlight">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        25% Off First Month
+                    </div>
+                    <div class="offer-div"></div>
+                    <div class="offer-item">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Free Estimates
+                    </div>
+                    <div class="offer-div"></div>
+                    <div class="offer-item">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        Licensed &amp; Insured
+                    </div>
+                    <div class="offer-div"></div>
+                    <div class="offer-item">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        5.0 Google Rating
+                    </div>
                 </div>
-                <div class="offer-div"></div>
-                <div class="offer-item">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                    Free Estimates
-                </div>
-                <div class="offer-div"></div>
-                <div class="offer-item">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    Licensed &amp; Insured
-                </div>
-                <div class="offer-div"></div>
-                <div class="offer-item">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    5.0 Google Rating
+                <div class="hero-actions">
+                    <a href="#quote" class="btn-primary btn-primary--lg">
+                        Get My Free Estimate
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                    <a href="#gallery" class="btn-ghost">See Our Work ↓</a>
                 </div>
             </div>
-            <div class="hero-actions">
-                <a href="#quote" class="btn-primary btn-primary--lg">
-                    Get My Free Estimate
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </a>
-                <a href="#gallery" class="btn-ghost">See Our Work ↓</a>
+            <div class="hero-mascot" aria-hidden="true">
+                <img src="./Wigley2.jpg" alt="Wigley mascot" loading="lazy">
             </div>
         </div>
-        <div class="hero-mascot" aria-hidden="true">
-            <img src="./Wigley2.jpg" alt="Wigley mascot" loading="lazy">
+        <div class="scroll-cue" aria-hidden="true">
+            <span class="scroll-label">Scroll</span>
+            <div class="scroll-mouse"><div class="scroll-dot"></div></div>
         </div>
     </div>
-    <div class="scroll-cue" aria-hidden="true">
-        <span class="scroll-label">Scroll</span>
-        <div class="scroll-mouse"><div class="scroll-dot"></div></div>
+    <!-- TICKER — visible on page load, no scroll needed -->
+    <div class="hero-stats">
+        <div class="hstat-ticker">
+            <!-- Set 1 -->
+            <div class="hstat"><div class="hstat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="hstat-lbl">5.0 ★ on Google · 7 Reviews</div></div>
+            <div class="hstat"><div class="hstat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="hstat-lbl">Licensed &amp; Insured</div></div>
+            <div class="hstat"><div class="hstat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="hstat-lbl">Reliable &amp; Punctual</div></div>
+            <div class="hstat"><div class="hstat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div class="hstat-lbl">100% Satisfaction Guaranteed</div></div>
+            <div class="hstat"><div class="hstat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="hstat-lbl">Pasco &amp; Hillsborough County</div></div>
+            <div class="hstat"><div class="hstat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="hstat-lbl">25% Off First Month — Recurring Plans</div></div>
+            <!-- Set 2 — duplicate for seamless loop -->
+            <div class="hstat"><div class="hstat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="hstat-lbl">5.0 ★ on Google · 7 Reviews</div></div>
+            <div class="hstat"><div class="hstat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="hstat-lbl">Licensed &amp; Insured</div></div>
+            <div class="hstat"><div class="hstat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="hstat-lbl">Reliable &amp; Punctual</div></div>
+            <div class="hstat"><div class="hstat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div class="hstat-lbl">100% Satisfaction Guaranteed</div></div>
+            <div class="hstat"><div class="hstat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="hstat-lbl">Pasco &amp; Hillsborough County</div></div>
+            <div class="hstat"><div class="hstat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="hstat-lbl">25% Off First Month — Recurring Plans</div></div>
+        </div>
     </div>
 </section>
-
-<!-- ══════════════════════ TRUST BAR ══════════════════════ -->
-<div class="trust-bar">
-    <div class="container">
-        <div class="trust-bar__inner">
-            <div class="trust-item">
-                <div class="trust-stars">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                </div>
-                <span>5.0 on Google (7 Reviews)</span>
-            </div>
-            <div class="trust-div"></div>
-            <div class="trust-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Licensed &amp; Insured</span></div>
-            <div class="trust-div"></div>
-            <div class="trust-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Reliable &amp; Punctual</span></div>
-            <div class="trust-div"></div>
-            <div class="trust-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Satisfaction Guaranteed</span></div>
-            <div class="trust-div"></div>
-            <div class="trust-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Pasco &amp; Hillsborough County</span></div>
-        </div>
-    </div>
-</div>
 
 <!-- ══════════════════════ PAIN / BEFORE-AFTER ══════════════════════ -->
 <section id="pain">
@@ -693,39 +703,70 @@
             <h2 class="section-headline">5.0 Stars on Google.<br><em>Here's Why.</em></h2>
         </div>
         <!-- ⚠️ PLACEHOLDER — Replace with real Google reviews before launch -->
-        <div class="tc-grid">
-            <div class="tc">
-                <div class="tc-stars">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <div class="tc-carousel-wrap">
+            <div class="tc-track">
+                <!-- SET 1 -->
+                <div class="tc">
+                    <div class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                    <p class="tc-quote"><span class="tc-open">"</span>These guys are the real deal. Showed up exactly when they said, the lawn looked incredible after, and they cleaned up every clipping before leaving. Best lawn service I've found in Zephyrhills.</p>
+                    <div class="tc-author"><div class="tc-ava">J</div><div><div class="tc-name">James R.</div><div class="tc-location">Zephyrhills, FL</div><div class="tc-source">⭐ Google Review</div></div></div>
                 </div>
-                <p class="tc-quote"><span class="tc-open">"</span>These guys are the real deal. Showed up exactly when they said, the lawn looked incredible after, and they cleaned up every clipping before leaving. Best lawn service I've found in Zephyrhills.</p>
-                <div><div class="tc-name">James R.</div><div class="tc-location">Zephyrhills, FL</div><div class="tc-source">⭐ Google Review</div></div>
-            </div>
-            <div class="tc">
-                <div class="tc-stars">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <div class="tc">
+                    <div class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                    <p class="tc-quote"><span class="tc-open">"</span>Had my driveway and patio pressure washed and the difference is night and day. Fast, professional, priced fair. Couldn't believe how clean everything got. Will absolutely use them again.</p>
+                    <div class="tc-author"><div class="tc-ava">M</div><div><div class="tc-name">Maria L.</div><div class="tc-location">Wesley Chapel, FL</div><div class="tc-source">⭐ Google Review</div></div></div>
                 </div>
-                <p class="tc-quote"><span class="tc-open">"</span>Had my driveway and patio pressure washed and the difference is night and day. Fast, professional, priced fair. Couldn't believe how clean everything got. Will absolutely use them again.</p>
-                <div><div class="tc-name">Maria L.</div><div class="tc-location">Wesley Chapel, FL</div><div class="tc-source">⭐ Google Review</div></div>
-            </div>
-            <div class="tc">
-                <div class="tc-stars">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <div class="tc">
+                    <div class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                    <p class="tc-quote"><span class="tc-open">"</span>Hired Wigley for regular lawn maintenance and they've been consistent every single week. My yard looks better than it ever has. Easy to work with, respectful of the property, and fair prices.</p>
+                    <div class="tc-author"><div class="tc-ava">D</div><div><div class="tc-name">David K.</div><div class="tc-location">Dade City, FL</div><div class="tc-source">⭐ Google Review</div></div></div>
                 </div>
-                <p class="tc-quote"><span class="tc-open">"</span>Hired Wigley for regular lawn maintenance and they've been consistent every single week. My yard looks better than it ever has. Easy to work with, respectful of the property, and fair prices.</p>
-                <div><div class="tc-name">David K.</div><div class="tc-location">Dade City, FL</div><div class="tc-source">⭐ Google Review</div></div>
+                <div class="tc">
+                    <div class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                    <p class="tc-quote"><span class="tc-open">"</span>I was skeptical at first but the results speak for themselves. They trimmed our hedges, cleaned up the beds, and the whole yard looked completely different in one visit. Already booked them weekly.</p>
+                    <div class="tc-author"><div class="tc-ava">S</div><div><div class="tc-name">Sandra T.</div><div class="tc-location">Zephyrhills, FL</div><div class="tc-source">⭐ Google Review</div></div></div>
+                </div>
+                <div class="tc">
+                    <div class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                    <p class="tc-quote"><span class="tc-open">"</span>Called on a Monday, they were here Wednesday. Pressure washed the whole driveway and fence line. My neighbors actually came over to ask who did the work. Highly recommend these guys.</p>
+                    <div class="tc-author"><div class="tc-ava">R</div><div><div class="tc-name">Robert H.</div><div class="tc-location">Wesley Chapel, FL</div><div class="tc-source">⭐ Google Review</div></div></div>
+                </div>
+                <div class="tc">
+                    <div class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                    <p class="tc-quote"><span class="tc-open">"</span>Great crew. Professional, on time, and they actually listen when you tell them what you want. My lawn has never looked this good. Zero complaints — will keep using them all season.</p>
+                    <div class="tc-author"><div class="tc-ava">L</div><div><div class="tc-name">Lisa C.</div><div class="tc-location">Dade City, FL</div><div class="tc-source">⭐ Google Review</div></div></div>
+                </div>
+                <!-- SET 2 — duplicate for seamless loop -->
+                <div class="tc">
+                    <div class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                    <p class="tc-quote"><span class="tc-open">"</span>These guys are the real deal. Showed up exactly when they said, the lawn looked incredible after, and they cleaned up every clipping before leaving. Best lawn service I've found in Zephyrhills.</p>
+                    <div class="tc-author"><div class="tc-ava">J</div><div><div class="tc-name">James R.</div><div class="tc-location">Zephyrhills, FL</div><div class="tc-source">⭐ Google Review</div></div></div>
+                </div>
+                <div class="tc">
+                    <div class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                    <p class="tc-quote"><span class="tc-open">"</span>Had my driveway and patio pressure washed and the difference is night and day. Fast, professional, priced fair. Couldn't believe how clean everything got. Will absolutely use them again.</p>
+                    <div class="tc-author"><div class="tc-ava">M</div><div><div class="tc-name">Maria L.</div><div class="tc-location">Wesley Chapel, FL</div><div class="tc-source">⭐ Google Review</div></div></div>
+                </div>
+                <div class="tc">
+                    <div class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                    <p class="tc-quote"><span class="tc-open">"</span>Hired Wigley for regular lawn maintenance and they've been consistent every single week. My yard looks better than it ever has. Easy to work with, respectful of the property, and fair prices.</p>
+                    <div class="tc-author"><div class="tc-ava">D</div><div><div class="tc-name">David K.</div><div class="tc-location">Dade City, FL</div><div class="tc-source">⭐ Google Review</div></div></div>
+                </div>
+                <div class="tc">
+                    <div class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                    <p class="tc-quote"><span class="tc-open">"</span>I was skeptical at first but the results speak for themselves. They trimmed our hedges, cleaned up the beds, and the whole yard looked completely different in one visit. Already booked them weekly.</p>
+                    <div class="tc-author"><div class="tc-ava">S</div><div><div class="tc-name">Sandra T.</div><div class="tc-location">Zephyrhills, FL</div><div class="tc-source">⭐ Google Review</div></div></div>
+                </div>
+                <div class="tc">
+                    <div class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                    <p class="tc-quote"><span class="tc-open">"</span>Called on a Monday, they were here Wednesday. Pressure washed the whole driveway and fence line. My neighbors actually came over to ask who did the work. Highly recommend these guys.</p>
+                    <div class="tc-author"><div class="tc-ava">R</div><div><div class="tc-name">Robert H.</div><div class="tc-location">Wesley Chapel, FL</div><div class="tc-source">⭐ Google Review</div></div></div>
+                </div>
+                <div class="tc">
+                    <div class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                    <p class="tc-quote"><span class="tc-open">"</span>Great crew. Professional, on time, and they actually listen when you tell them what you want. My lawn has never looked this good. Zero complaints — will keep using them all season.</p>
+                    <div class="tc-author"><div class="tc-ava">L</div><div><div class="tc-name">Lisa C.</div><div class="tc-location">Dade City, FL</div><div class="tc-source">⭐ Google Review</div></div></div>
+                </div>
             </div>
         </div>
     </div>
