@@ -85,8 +85,6 @@
         .hero-main{flex:1;display:flex;align-items:center;position:relative;z-index:2;}
         .hero-layout{display:flex;align-items:center;justify-content:space-between;gap:3rem;width:100%;}
         .hero-content{max-width:660px;}
-        .hero-mascot{flex-shrink:0;}
-        .hero-mascot img{width:260px;height:260px;border-radius:50%;object-fit:contain;border:4px solid rgba(109,190,45,.35);box-shadow:0 0 60px rgba(109,190,45,.12),0 20px 60px rgba(15,34,24,.55);}
 
         /* HERO TICKER */
         .hero-stats{flex-shrink:0;background:rgba(10,26,17,.88);border-top:1px solid rgba(109,190,45,.18);padding:.95rem 0;overflow:hidden;position:relative;z-index:3;}
@@ -330,9 +328,17 @@
         .footer-bottom-text{font-family:'Lato',sans-serif;font-size:.76rem;color:rgba(255,255,255,.28);}
         .footer-bottom-text a{color:var(--lime);text-decoration:none;}
 
+        /* MOBILE STICKY CTA */
+        .sticky-cta-mobile{display:none;position:fixed;bottom:0;left:0;right:0;z-index:199;background:var(--forest-deep);border-top:2px solid rgba(109,190,45,.22);padding:.85rem 1.2rem calc(.85rem + env(safe-area-inset-bottom)) 1.2rem;gap:.75rem;transform:translateY(100%);transition:transform .35s cubic-bezier(.25,.46,.45,.94);}
+        .sticky-cta-mobile.visible{transform:translateY(0);}
+        .sticky-cta-call{flex:1;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.85rem 1rem;background:rgba(109,190,45,.12);border:1.5px solid rgba(109,190,45,.3);border-radius:4px;font-family:'Lato',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--lime);text-decoration:none;transition:background .25s;}
+        .sticky-cta-call:hover{background:rgba(109,190,45,.2);}
+        .sticky-cta-quote{flex:2;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.85rem 1rem;background:var(--lime);border-radius:4px;font-family:'Lato',sans-serif;font-size:.82rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--forest-deep);text-decoration:none;transition:background .25s;}
+        .sticky-cta-quote:hover{background:var(--lime-dark);}
+
         /* MOBILE */
         @media(max-width:900px){
-            .hero-mascot{display:none;}
+            .sticky-cta-mobile{display:flex;}
             .pain-inner,.offer-inner,.faq-layout,.quote-layout{grid-template-columns:1fr;gap:3rem;}
             .services-grid{grid-template-columns:repeat(2,1fr);}
             .stats-grid{grid-template-columns:repeat(2,1fr);}
@@ -419,9 +425,6 @@
                     </a>
                     <a href="#gallery" class="btn-ghost">See Our Work ↓</a>
                 </div>
-            </div>
-            <div class="hero-mascot" aria-hidden="true">
-                <img src="./Wigley3.jpg" alt="Wigley mascot" loading="lazy">
             </div>
         </div>
         <div class="scroll-cue" aria-hidden="true">
@@ -977,7 +980,17 @@
 </footer>
 
 <script>
-    // NAV SCROLL
+    // MOBILE STICKY CTA — appears after scrolling 80% through hero
+    const stickyCta = document.getElementById('sticky-cta');
+    if (stickyCta) {
+        const heroEl = document.getElementById('hero');
+        window.addEventListener('scroll', () => {
+            const threshold = heroEl ? heroEl.offsetHeight * 0.8 : 500;
+            stickyCta.classList.toggle('visible', window.pageYOffset > threshold);
+        }, { passive: true });
+    }
+
+
     const nav = document.getElementById('main-nav');
     window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
 
@@ -1020,7 +1033,6 @@
         gsap.from('.hero-subtext',     { opacity: 0, y: 20, duration: 0.9, delay: 0.55, ease: 'power2.out' });
         gsap.from('.hero-offer-strip', { opacity: 0, y: 16, duration: 0.8, delay: 0.7,  ease: 'power2.out' });
         gsap.from('.hero-actions',     { opacity: 0, y: 16, duration: 0.8, delay: 0.85, ease: 'power2.out' });
-        gsap.from('.hero-mascot',      { opacity: 0, scale: 0.88, duration: 1.1, delay: 0.5, ease: 'back.out(1.4)' });
 
         gsap.utils.toArray('.section-headline').forEach(el => {
             gsap.from(el, { opacity: 0, y: 22, duration: 0.85, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 87%', once: true } });
@@ -1098,5 +1110,17 @@
         io.observe(slider);
     })();
 </script>
+<!-- MOBILE STICKY CTA — shows after scrolling past hero -->
+<div class="sticky-cta-mobile" id="sticky-cta">
+    <a href="tel:8133150689" class="sticky-cta-call">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.81 19.79 19.79 0 01.22 2.18 2 2 0 012.18 0h3.09c.9 0 1.64.65 1.72 1.53a12.4 12.4 0 00.56 2.81 2 2 0 01-.45 2.11L5.91 7.91A16 16 0 0016.09 18.09l.61-.61a2 2 0 012.11-.45 12.4 12.4 0 002.81.56C21.35 17.28 22 18.02 22 18.91z"/></svg>
+        Call Now
+    </a>
+    <a href="#quote" class="sticky-cta-quote">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        Get Free Estimate
+    </a>
+</div>
+
 </body>
 </html>
