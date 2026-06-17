@@ -344,6 +344,19 @@
         .sticky-cta-call{flex:1;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.85rem 1rem;background:rgba(109,190,45,.12);border:1.5px solid rgba(109,190,45,.3);border-radius:4px;font-family:'Lato',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--lime);text-decoration:none;}
         .sticky-cta-quote{flex:2;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.85rem 1rem;background:var(--lime);border-radius:4px;font-family:'Lato',sans-serif;font-size:.82rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--forest-deep);text-decoration:none;}
 
+        /* HAMBURGER + MOBILE MENU */
+        .nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
+        .nav-hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:background .4s;}
+        #main-nav.scrolled .nav-hamburger span{background:var(--forest);}
+        .mobile-menu{display:none;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:var(--forest-deep);border-top:1px solid rgba(109,190,45,.15);box-shadow:0 8px 32px rgba(15,34,24,.5);z-index:199;}
+        .mobile-menu.open{display:flex;}
+        .mobile-menu a{font-family:'Lato',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.75);text-decoration:none;padding:1.1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.06);transition:color .2s,background .2s;}
+        .mobile-menu a:last-of-type{border-bottom:none;}
+        .mobile-menu a:hover{color:var(--lime);background:rgba(109,190,45,.05);}
+        .mobile-menu-cta{padding:1.1rem 1.5rem 1.4rem;}
+        .mobile-menu-cta a{display:flex!important;align-items:center;justify-content:center;width:100%;padding:1rem!important;background:var(--lime)!important;color:var(--forest-deep)!important;border-radius:4px;font-weight:900!important;border-bottom:none!important;}
+        .mobile-menu-cta a:hover{background:var(--lime-dark)!important;}
+
         /* MOBILE */
         @media(max-width:900px){
             .hero-bg{background-position:72% center;}
@@ -359,6 +372,7 @@
             .footer-inner{grid-template-columns:1fr;gap:2.5rem;}
             .form-row{grid-template-columns:1fr;}
             .nav-links{display:none;}
+            .nav-hamburger{display:flex;}
         }
         @media(max-width:600px){
             .services-grid{grid-template-columns:1fr;}
@@ -393,7 +407,17 @@
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </a>
             </div>
+            <button class="nav-hamburger" id="nav-ham" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
         </div>
+    </div>
+    <div class="mobile-menu" id="nav-mob">
+        <a href="#services">Services</a>
+        <a href="#gallery">Our Work</a>
+        <a href="#testimonials">Reviews</a>
+        <a href="#faq">FAQ</a>
+        <div class="mobile-menu-cta"><a href="#quote">Get My Free Estimate →</a></div>
     </div>
 </nav>
 
@@ -1014,6 +1038,14 @@
 
     const nav = document.getElementById('main-nav');
     window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
+
+    // HAMBURGER MENU
+    const ham = document.getElementById('nav-ham');
+    const mob = document.getElementById('nav-mob');
+    if (ham && mob) {
+        ham.addEventListener('click', () => mob.classList.toggle('open'));
+        mob.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mob.classList.remove('open')));
+    }
 
     // FAQ
     function toggleFaq(btn) {
